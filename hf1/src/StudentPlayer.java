@@ -9,25 +9,57 @@ public class StudentPlayer extends Player{
 
     final int ROWS = 6;
     final int COLS = 7;
+
     @Override
     public int step(Board board) {        
         int bestColumn = (int)(Math.random() * 7);
-        //3System.out.print("Control: ");
+        //int bestScore = minimax(board, 5, true);
         int bestScore = score(board);
-
+        
         for(int i = 0; i < 7; i++){ //each column
             Board bCopy = new Board(board);
             bCopy.step(2, i);
+            //int tempScore = minimax(bCopy, 5, true);
             int tempScore = score(bCopy);
             if(tempScore > bestScore){
                 bestScore = tempScore;
                 bestColumn = i;
             }
         }
-
+        
         return bestColumn;
     }
 
+    private int minimax(Board node, int depth, boolean maximizingPlayer){
+        if(depth == 0 || node.gameEnded())
+            return score(node);
+
+        if (maximizingPlayer) {
+            int value = Integer.MIN_VALUE;
+            for(int i = 0; i < 7; i++){ //each column
+                Board nCopy = new Board(node);
+                nCopy.step(COMPUTER, i);
+                int score = minimax(nCopy, depth - 1, false);
+                if(score > value){
+                    value = score;
+                }
+
+            }
+            return value;
+        }else {
+            int value = Integer.MAX_VALUE;
+            for(int i = 0; i < 7; i++){ //each column
+                Board nCopy = new Board(node);
+                nCopy.step(PLAYER, i);
+                int score = minimax(nCopy, depth - 1, true);
+                if(score < value){
+                    value = score;
+                }
+
+            }
+            return value;
+        }
+    }
 
     private int score(Board b) {
         int[][] board = b.getState();
