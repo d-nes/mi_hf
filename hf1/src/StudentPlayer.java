@@ -3,6 +3,12 @@ public class StudentPlayer extends Player{
         super(playerIndex, boardSize, nToConnect);
     }
 
+    final int EMPTY = 0;
+    final int PLAYER = 1;
+    final int COMPUTER = 2;
+
+    final int ROWS = 6;
+    final int COLS = 7;
     @Override
     public int step(Board board) {        
         int bestColumn = (int)(Math.random() * 7);
@@ -22,36 +28,41 @@ public class StudentPlayer extends Player{
         return bestColumn;
     }
 
-    final int EMPTY = 0;
-    final int PLAYER = 1;
-    final int COMPUTER = 2;
-
-    final int ROWS = 6;
-    final int COLS = 7;
 
     private int score(Board b) {
         int[][] board = b.getState();
+
         int score = 0;
+
+        final int reward4 = 100;
+        final int reward3 = 50;
+        final int reward2 = 10;
+        final int penalty = 80;
+
 
         //horizontal
         for(int y = 0; y < ROWS; y++){//each row
             for(int i = 0; i < 4; i++){//subsets of 4
                 int pieceCount = 0;
+                int enemyCount = 0;
                 int emptyCount = 0;
                 for(int j = 0; j < 4; j++){//individual items of a subset
                     int x = i + j;
-                    if(board[y][x] == COMPUTER){
+                    if(board[y][x] == COMPUTER)
                         pieceCount++;
-                    } else if(board[y][x] == EMPTY){
+                    else if(board[y][x] == EMPTY)
                         emptyCount++;
-                    }
+                    else if(board[y][x] == PLAYER)
+                        enemyCount++;
                 }
                 if(pieceCount == 4)
-                    score += 100;
-                    else if(pieceCount == 3 && emptyCount == 1)
-                    score += 50;
+                    score += reward4;
+                else if(pieceCount == 3 && emptyCount == 1)
+                    score += reward3;
                 else if(pieceCount == 2 && emptyCount == 2)
-                    score += 10;
+                    score += reward2;
+                else if(enemyCount == 3 && emptyCount == 1)
+                    score -= penalty;
             }
         }
 
@@ -59,21 +70,25 @@ public class StudentPlayer extends Player{
         for(int x = 0; x < COLS; x++){//each col
             for(int i = 0; i < 3; i++){//subsets of 4
                 int pieceCount = 0;
+                int enemyCount = 0;
                 int emptyCount = 0;
                 for(int j = 0; j < 4; j++){//individual items of a subset
                     int y = i + j;
-                    if(board[y][x] == COMPUTER){
+                    if(board[y][x] == COMPUTER)
                         pieceCount++;
-                    } else if(board[y][x] == EMPTY){
+                    else if(board[y][x] == EMPTY)
                         emptyCount++;
-                    }
+                    else if(board[y][x] == PLAYER)
+                        enemyCount++;
                 }
                 if(pieceCount == 4)
-                    score += 100;
+                    score += reward4;
                 else if(pieceCount == 3 && emptyCount == 1)
-                    score += 50;
+                    score += reward3;
                 else if(pieceCount == 2 && emptyCount == 2)
-                    score += 10;
+                    score += reward2;
+                else if(enemyCount == 3 && emptyCount == 1)
+                    score -= penalty;
             }
         }
         
@@ -83,22 +98,26 @@ public class StudentPlayer extends Player{
         for(int y = 0; y < 3; y++){
             for(int x = 0; x < 4; x++){
                 int pieceCount = 0;
+                int enemyCount = 0;
                 int emptyCount = 0;
 
                 for(int i = 0; i < 4; i++){
-                    if(board[y + i][x + i] == COMPUTER){
+                    if(board[y + i][x + i] == COMPUTER)
                         pieceCount++;
-                    } else if(board[y + i][x + i] == EMPTY){
+                    else if(board[y + i][x + i] == EMPTY)
                         emptyCount++;
-                    }
+                    else if(board[y][x] == PLAYER)
+                        enemyCount++;
                 }
 
                 if(pieceCount == 4)
-                    score += 100;
+                    score += reward4;
                 else if(pieceCount == 3 && emptyCount == 1)
-                    score += 50;
+                    score += reward3;
                 else if(pieceCount == 2 && emptyCount == 2)
-                    score += 10;
+                    score += reward2;
+                else if(enemyCount == 3 && emptyCount == 1)
+                    score -= penalty;
             }
         }
 
@@ -106,22 +125,26 @@ public class StudentPlayer extends Player{
         for(int y = 0; y < 3; y++){
             for(int x = 6; x >= 3; x--){
                 int pieceCount = 0;
+                int enemyCount = 0;
                 int emptyCount = 0;
 
                 for(int i = 0; i < 4; i++){
-                    if(board[y + i][x - i] == COMPUTER){
+                    if(board[y + i][x - i] == COMPUTER)
                         pieceCount++;
-                    } else if(board[y + i][x - i] == EMPTY){
+                    else if(board[y + i][x - i] == EMPTY)
                         emptyCount++;
-                    }
+                    else if(board[y][x] == PLAYER)
+                        enemyCount++;
                 }
 
                 if(pieceCount == 4)
-                    score += 100;
+                    score += reward4;
                 else if(pieceCount == 3 && emptyCount == 1)
-                    score += 50;
+                    score += reward3;
                 else if(pieceCount == 2 && emptyCount == 2)
-                    score += 10;
+                    score += reward2;
+                else if(enemyCount == 3 && emptyCount == 1)
+                    score -= penalty;
             }
         }
 
