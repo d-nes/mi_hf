@@ -1,29 +1,32 @@
 package hf3;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 public class Solution {
 
-    static int[][] trainingData = new int[1000][10];
+    public static int[][] readData() {
+        List<int[]> lines = new ArrayList<>();
 
-    public static void readData() {
-        Scanner sc;
-        try {
-            sc = new Scanner(new File("hf3\\train.csv")); // TODO
-            int lines = 0;
-            while (sc.hasNext()) {
-                String[] values = sc.next().split(",");
-                for(int i = 0; i < values.length; i++){
-                    trainingData[lines++][i] = Integer.parseInt(values[i]);
+        try (BufferedReader br = new BufferedReader(new FileReader("hf3\\train.csv"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(",");
+                int[] intValues = new int[values.length];
+                for (int i = 0; i < values.length; i++) {
+                    intValues[i] = Integer.parseInt(values[i]);
                 }
+                lines.add(intValues);
             }
-            sc.close();
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-            return;
         }
+
+        return lines.toArray(new int[0][]);
     }
 
     public static double getEntropy(int nCat1, int nCat2) {
@@ -43,8 +46,8 @@ public class Solution {
     }  
 
     public static void main(String[] args) {
-        readData();
-        System.out.println(trainingData);
+        int[][] trainingData = readData();
+        
     }
 
 }
