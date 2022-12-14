@@ -40,10 +40,44 @@ public class Solution {
     }
 
     public static int[] getBestSeparation(int[][] features, boolean[] labels) {
-        int[] answer = { 0, 0 };
-
-        return answer;
-    }  
+        double maxGain = 0;
+        int bestFeature = -1;
+        int bestValue = -1;
+    
+        for (int i = 0; i < features[0].length; i++) {
+            for (int j = 0; j < features.length; j++) {
+                int nCat1 = 0;
+                int nCat2 = 0;
+    
+                // count the number of elements in each category
+                for (int k = 0; k < features.length; k++) {
+                    if (features[k][i] <= features[j][i]) {
+                        nCat1++;
+                    } else {
+                        nCat2++;
+                    }
+                }
+    
+                // calculate the entropy of each category
+                double entropy1 = getEntropy(nCat1, nCat2);
+                double entropy2 = getEntropy(features.length - nCat1, features.length - nCat2);
+    
+                // calculate the information gain
+                double gain = entropy1 + entropy2;
+    
+                // check if this is the best gain so far
+                if (gain > maxGain) {
+                    maxGain = gain;
+                    bestFeature = i;
+                    bestValue = features[j][i];
+                }
+            }
+        }
+    
+        return new int[] {bestFeature, bestValue};
+    }
+    
+     
 
     public static void main(String[] args) {
         int[][] trainingData = readData();
