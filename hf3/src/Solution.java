@@ -1,5 +1,4 @@
-package hf3;
-
+package hf3.src;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,7 +11,7 @@ public class Solution {
     public static int[][] readData() {
         List<int[]> lines = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader("hf3\\train.csv"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("train.csv"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
@@ -43,8 +42,8 @@ public class Solution {
         double maxGain = 0;
         int bestFeature = -1;
         int bestValue = -1;
-    
-        for (int i = 0; i < features[0].length; i++) {
+
+        for (int i = 0; i < features[0].length - 1; i++) { //-1 so that the labels are not included
             for (int j = 0; j < features.length; j++) {
                 int nCat1 = 0;
                 int nCat2 = 0;
@@ -81,7 +80,18 @@ public class Solution {
 
     public static void main(String[] args) {
         int[][] trainingData = readData();
-        
+        boolean[] labels = new boolean[trainingData.length];
+
+        for(int i = 0; i < trainingData.length; i++){
+            if(trainingData[i][8] == 1)
+                labels[i] = true;
+            else
+                labels[i] = false;
+            //labels[i] = trainingData[i][8];
+        }
+
+        int[] separation = getBestSeparation(trainingData, labels);
+        //System.out.println(separation[0] + " " + separation[1]);
     }
 
 }
